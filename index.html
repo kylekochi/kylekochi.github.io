@@ -212,15 +212,16 @@
     <a class="btn-secondary" href="https://linkedin.com/in/kylekochi" target="_blank">
       LinkedIn ↗
     </a>
-    <a class="btn-secondary" href="mailto:kochikyle01@gmail.com" target="_blank">
+    <a class="btn-secondary" id="email-btn">
       Email ↗
     </a>
   </div>
 </div>
 
-<div class="corner-mark">kochikyle01@gmail.com</div>
+<div class="corner-mark" id="corner-email"></div>
 
-</body>
-</html>
-
-# Feb 28 2026 
+<script>
+  var e = 'kochikyle01' + '@' + 'gmail.com';
+  document.getElementById('email-btn').href = 'mailto:' + e;
+  document.getElementById('corner-email').textContent = e;
+</script>
