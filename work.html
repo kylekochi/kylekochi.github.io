@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kyle Kochi — Work</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0e0e0e;
+      --surface: #131313;
+      --border: #1e1e1e;
+      --border-bright: #2a2a2a;
+      --text: #f0ede8;
+      --muted: #555;
+      --dim: #333;
+      --accent: #d4ff4e;
+      --accent-dim: rgba(212, 255, 78, 0.07);
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.5;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(14,14,14,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(1.5rem, 4vw, 3rem);
+      height: 56px;
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    .nav-links a {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 4vw, 3rem) 2.5rem;
+      border-bottom: 1px solid var(--border);
+      opacity: 0;
+      animation: fadeUp 0.5s 0.05s forwards;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.2rem, 5vw, 4.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 520px;
+    }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      position: relative;
+      z-index: 1;
+      padding: 1.25rem clamp(1.5rem, 4vw, 3rem);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      opacity: 0;
+      animation: fadeUp 0.5s 0.15s forwards;
+    }
+
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--dim);
+      min-width: 52px;
+    }
+
+    .chip {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.8rem;
+      border: 1px solid var(--border-bright);
+      color: var(--muted);
+      background: none;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .chip:hover { color: var(--text); border-color: #444; }
+    .chip.on {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
+    }
+
+    .filter-divider {
+      width: 1px;
+      height: 12px;
+      background: var(--border-bright);
+      margin: 0 0.25rem;
+    }
+
+    .result-count {
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      color: var(--dim);
+      margin-left: auto;
+    }
+
+    /* ── GRID ── */
+    .grid-wrapper {
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      animation: fadeUp 0.5s 0.25s forwards;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .card {
+      background: var(--bg);
+      overflow: hidden;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .card:hover { background: #111; }
+    .card[data-hidden="true"] { display: none; }
+
+    .card-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--border-bright);
+      text-transform: uppercase;
+      overflow: hidden;
+      position: relative;
+    }
+    .card-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(30%) brightness(0.85);
+      transition: filter 0.3s, transform 0.4s;
+    }
+    .card:hover .card-thumb img {
+      filter: grayscale(0%) brightness(1);
+      transform: scale(1.03);
+    }
+
+    /* type badge on thumb */
+    .card-type-badge {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      font-size: 0.55rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      background: rgba(14,14,14,0.85);
+      border: 1px solid var(--border-bright);
+      color: var(--muted);
+    }
+
+    .card-body {
+      padding: 1.25rem 1.5rem 1.5rem;
+    }
+
+    .card-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.6rem;
+    }
+    .card-tag {
+      font-size: 0.55rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .card-tag + .card-tag::before {
+      content: '·';
+      margin-right: 0.5rem;
+      color: var(--dim);
+    }
+
+    .card-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+      transition: color 0.2s;
+    }
+    .card:hover .card-title { color: var(--accent); }
+
+    .card-desc {
+      font-size: 0.72rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    .card-date {
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      color: var(--dim);
+    }
+    .card-arrow {
+      font-size: 0.7rem;
+      color: var(--dim);
+      transition: color 0.2s, transform 0.2s;
+    }
+    .card:hover .card-arrow { color: var(--accent); transform: translate(2px, -2px); }
+
+    /* ── EMPTY STATE ── */
+    .empty {
+      display: none;
+      position: relative;
+      z-index: 1;
+      padding: 5rem 3rem;
+      text-align: center;
+      color: var(--dim);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 2rem clamp(1.5rem, 4vw, 3rem);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    footer span {
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--dim);
+    }
+    footer a {
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    footer a:hover { color: var(--accent); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">Kyle <span>Kochi</span></a>
+  <div class="nav-links">
+    <a href="work.html" class="active">Work</a>
+    <a href="#">Journal</a>
+    <a href="#">Photos</a>
+    <a href="#">About</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-eyebrow">Selected Work</div>
+  <h1>Projects, writing<br>&amp; everything else.</h1>
+  <p>A running collection of engineering projects, lab work, hackathons, journal posts, and things I'm building — filtered however you want.</p>
+</div>
+
+<div class="filter-bar" id="filterBar">
+  <div class="filter-row">
+    <span class="filter-label">Type</span>
+    <button class="chip on" data-filter-type="type" data-value="all">All</button>
+    <div class="filter-divider"></div>
+    <button class="chip" data-filter-type="type" data-value="project">Project</button>
+    <button class="chip" data-filter-type="type" data-value="blog">Blog</button>
+    <button class="chip" data-filter-type="type" data-value="video">Video</button>
+    <button class="chip" data-filter-type="type" data-value="photo">Photo</button>
+    <span class="result-count" id="resultCount">— items</span>
+  </div>
+  <div class="filter-row">
+    <span class="filter-label">Topic</span>
+    <button class="chip on" data-filter-type="topic" data-value="all">All</button>
+    <div class="filter-divider"></div>
+    <button class="chip" data-filter-type="topic" data-value="robotics">Robotics</button>
+    <button class="chip" data-filter-type="topic" data-value="prosthetics">Prosthetics</button>
+    <button class="chip" data-filter-type="topic" data-value="electronics">Electronics</button>
+    <button class="chip" data-filter-type="topic" data-value="research">Research</button>
+    <button class="chip" data-filter-type="topic" data-value="software">Software</button>
+    <button class="chip" data-filter-type="topic" data-value="reflection">Reflection</button>
+  </div>
+</div>
+
+<div class="grid-wrapper">
+  <div class="grid" id="grid">
+
+    <!-- ── PROJECTS ── -->
+    <a class="card" href="projects/ada-co2.html"
+       data-type="project" data-topics="robotics research">
+      <div class="card-thumb">
+        <!-- swap src with real photo -->
+        <span>[ ADA-CO2 Photo ]</span>
+        <div class="card-type-badge">Project</div>
+      </div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="card-tag">Robotics</span>
+          <span class="card-tag">Research</span>
+        </div>
+        <div class="card-title">ADA-CO2 Self-Driving Lab</div>
+        <div class="card-desc">UR5e-based autonomous CO₂ electrolysis platform — vial mixing, pneumatic panels, cobot track integration.</div>
+        <div class="card-meta">
+          <span class="card-date">Jan – Dec 2023</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="card" href="projects/smart-prosthetic.html"
+       data-type="project" data-topics="prosthetics electronics">
+      <div class="card-thumb">
+        <span>[ Bionics Arm Photo ]</span>
+        <div class="card-type-badge">Project</div>
+      </div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="card-tag">Prosthetics</span>
+          <span class="card-tag">Electronics</span>
+        </div>
+        <div class="card-title">Transradial Smart Prosthetic Arm</div>
+        <div class="card-desc">45-member team. EMG motor control, custom PCBs, computer vision. Competed at CYBATHLON 2024.</div>
+        <div class="card-meta">
+          <span class="card-date">Sep 2020 – Aug 2024</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="card" href="projects/adjustable-socket.html"
+       data-type="project" data-topics="prosthetics">
+      <div class="card-thumb">
+        <span>[ Socket Photo ]</span>
+        <div class="card-type-badge">Project</div>
+      </div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="card-tag">Prosthetics</span>
+        </div>
+        <div class="card-title">Adjustable Prosthesis Socket</div>
+        <div class="card-desc">Parametric 3D-printed socket with lacing mechanism. Supports ±3% volume change, up to 7 kg load.</div>
+        <div class="card-meta">
+          <span class="card-date">2024 · UBC Capstone</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="card" href="projects/robot-assistant.html"
+       data-type="project" data-topics="robotics software">
+      <div class="card-thumb">
+        <span>[ Robot Arm Photo ]</span>
+        <div class="card-type-badge">Project</div>
+      </div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="card-tag">Robotics</span>
+          <span class="card-tag">Software</span>
+        </div>
+        <div class="card-title">Natural Language Robot Assistant</div>
+        <div class="card-desc">Grok VLA agent with webcam object detection and voice API. Built for xAI Hackathon 2025.</div>
+        <div class="card-meta">
+          <span class="card-date">2025 · xAI Hackathon</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="card" href="projects/microscope.html"
+       data-type="project" data-topics="research">
+      <div class="card-thumb">
+        <span>[ Microscope Photo ]</span>
+        <div class="card-type-badge">Project</div>
+      </div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="card-tag">Research</span>
+        </div>
+        <div class="card-title">Portable Low-Cost Microscope</div>
+        <div class="card-desc">6µm resolution. 90% cost reduction vs. lab equipment. Designed for sickle cell detection in rural Nepal.</div>
+        <div class="card-meta">
+          <span class="card-date">2023 · UBC</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="card" href="projects/fsr-pcb.html"
+       data-type="project" data-topics="electronics prosthetics">
+      <div class="card-thumb">
+        <span>[ PCB Photo ]</span>
+        <div class="card-type-badge">Project</div>
+      </div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="card-tag">Electronics</span>
+          <span class="card-tag">Prosthetics</span>
+        </div>
+        <div class="card-title">FSR Fingertip Sensing PCB</div>
+        <div class="card-desc">Stacked PCB for force-sensitive resistor integration. Designed in Altium, mounted directly on Raspberry Pi.</div>
+        <div class="card-meta">
+          <span class="card-date">2021 · UBC Bionics</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="card" href="projects/bci.html"
+       data-type="project" data-topics="electronics research">
+      <div class="card-thumb">
+        <span>[ EEG Headset Photo ]</span>
+        <div class="card-type-badge">Project</div>
+      </div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="card-tag">Electronics</span>
+          <span class="card-tag">Research</span>
+        </div>
+        <div class="card-title">Brain-Computer Interface System</div>
+        <div class="card-desc">Non-invasive EEG-based BCI for CYBATHLON BCI Race. Custom PCB, 3D-printed headset, MATLAB/Python pipelines.</div>
+        <div class="card-meta">
+          <span class="card-date">2022 · UBC Bionics</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- ── BLOG POSTS ── -->
+    <a class="card" href="blog/robot-48hrs.html"
+       data-type="blog" data-topics="robotics reflection">
+      <div class="card-thumb" style="background:#111;">
+        <span>[ Blog ]</span>
+        <div class="card-type-badge">Blog</div>
+      </div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="card-tag">Robotics</span>
+          <span class="card-tag">Reflection</span>
+        </div>
+        <div class="card-title">Lessons from building a robot arm in 48 hours</div>
+        <div class="card-desc">What the xAI hackathon actually taught me about rapid prototyping, scope, and showing up.</div>
+        <div class="card-meta">
+          <span class="card-date">Mar 2025</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="card" href="blog/shipping-hardware.html"
+       data-type="blog" data-topics="reflection">
+      <div class="card-thumb" style="background:#111;">
+        <span>[ Blog ]</span>
+        <div class="card-type-badge">Blog</div>
+      </div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="card-tag">Reflection</span>
+        </div>
+        <div class="card-title">What CYBATHLON taught me about shipping hardware</div>
+        <div class="card-desc">On deadlines, team coordination, and what it really means to build something that works under pressure.</div>
+        <div class="card-meta">
+          <span class="card-date">Jan 2025</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </div>
+    </a>
+
+    <a class="card" href="blog/socket-fit.html"
+       data-type="blog" data-topics="prosthetics">
+      <div class="card-thumb" style="background:#111;">
+        <span>[ Blog ]</span>
+        <div class="card-type-badge">Blog</div>
+      </div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="card-tag">Prosthetics</span>
+        </div>
+        <div class="card-title">Designing for adjustability: the socket problem</div>
+        <div class="card-desc">Why prosthetic socket fit is still unsolved, and what a parametric lacing system tries to fix.</div>
+        <div class="card-meta">
+          <span class="card-date">Nov 2024</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- ── VIDEO ── -->
+    <a class="card" href="https://www.youtube.com/watch?v=REPLACE" target="_blank"
+       data-type="video" data-topics="robotics">
+      <div class="card-thumb" style="background:#0a0a0a;">
+        <span>[ Video Thumbnail ]</span>
+        <div class="card-type-badge">Video</div>
+      </div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="card-tag">Robotics</span>
+        </div>
+        <div class="card-title">"Can you pass me the banana?"</div>
+        <div class="card-desc">Full demo of the xAI Hackathon robot — natural language commands, real-time object detection, live actuation.</div>
+        <div class="card-meta">
+          <span class="card-date">Mar 2025</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- ── PHOTOS ── -->
+    <a class="card" href="photos/lab.html"
+       data-type="photo" data-topics="research robotics">
+      <div class="card-thumb" style="background:#0d0d0d;">
+        <span>[ Lab Photo ]</span>
+        <div class="card-type-badge">Photo</div>
+      </div>
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="card-tag">Research</span>
+          <span class="card-tag">Robotics</span>
+        </div>
+        <div class="card-title">Inside the ADA-CO2 Lab</div>
+        <div class="card-desc">A photo series from the Berlinguette Research Group — robots, electrolyzer rigs, and the mess in between.</div>
+        <div class="card-meta">
+          <span class="card-date">2023</span>
+          <span class="card-arrow">↗</span>
+        </div>
+      </div>
+    </a>
+
+  </div>
+  <div class="empty" id="emptyState">No items match the selected filters.</div>
+</div>
+
+<footer>
+  <span>Kyle Kochi — <span id="footer-email"></span></span>
+  <a href="index.html">← Back to home</a>
+</footer>
+
+<script>
+  // Build footer email
+  var e = 'kochikyle01' + '@' + 'gmail.com';
+  document.getElementById('footer-email').textContent = e;
+
+  // ── FILTERING ──
+  var activeType  = 'all';
+  var activeTopic = 'all';
+
+  function applyFilters() {
+    var cards = document.querySelectorAll('.card');
+    var visible = 0;
+
+    cards.forEach(function(card) {
+      var type   = card.dataset.type;
+      var topics = card.dataset.topics ? card.dataset.topics.split(' ') : [];
+
+      var typeMatch  = activeType  === 'all' || type === activeType;
+      var topicMatch = activeTopic === 'all' || topics.indexOf(activeTopic) !== -1;
+
+      var show = typeMatch && topicMatch;
+      card.setAttribute('data-hidden', show ? 'false' : 'true');
+      if (show) visible++;
+    });
+
+    document.getElementById('resultCount').textContent = visible + ' item' + (visible !== 1 ? 's' : '');
+    document.getElementById('emptyState').style.display = visible === 0 ? 'block' : 'none';
+    document.getElementById('grid').style.display = visible === 0 ? 'none' : 'grid';
+  }
+
+  document.querySelectorAll('.chip').forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      var filterType = chip.dataset.filterType;
+      var value      = chip.dataset.value;
+
+      // Deactivate siblings in same row
+      chip.closest('.filter-row').querySelectorAll('.chip').forEach(function(c) {
+        c.classList.remove('on');
+      });
+      chip.classList.add('on');
+
+      if (filterType === 'type')  activeType  = value;
+      if (filterType === 'topic') activeTopic = value;
+
+      applyFilters();
+    });
+  });
+
+  // Init count
+  applyFilters();
+</script>
+
+</body>
+</html>
