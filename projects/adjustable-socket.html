@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Adjustable Prosthesis Socket — Kyle Kochi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0e0e0e;
+      --surface: #131313;
+      --border: #1e1e1e;
+      --border-bright: #2a2a2a;
+      --text: #f0ede8;
+      --muted: #555;
+      --dim: #333;
+      --accent: #d4ff4e;
+      --accent-dim: rgba(212, 255, 78, 0.07);
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(14,14,14,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(1.5rem, 4vw, 3rem);
+      height: 56px;
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-back {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--accent); }
+
+    /* ── CONTENT WRAPPER ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 4vw, 3rem) 6rem;
+      opacity: 0;
+      animation: fadeUp 0.5s 0.05s forwards;
+    }
+
+    /* ── HEADER ── */
+    .project-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+    }
+    .project-eyebrow::before {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .project-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+
+    .project-meta {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      padding: 1.25rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2.5rem;
+    }
+    .meta-item { display: flex; flex-direction: column; gap: 0.3rem; }
+    .meta-label {
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--dim);
+    }
+    .meta-value { font-size: 0.75rem; color: var(--muted); }
+    .meta-value a { color: var(--accent); text-decoration: none; }
+
+    /* ── HERO IMAGE ── */
+    .hero-image {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--border-bright);
+      text-transform: uppercase;
+      margin-bottom: 3rem;
+      overflow: hidden;
+    }
+    .hero-image img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* ── BODY TEXT ── */
+    .project-body {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    .section-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .project-body p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    /* Result stats row */
+    .results-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .result-stat {
+      background: var(--surface);
+      padding: 1.25rem 1.5rem;
+    }
+    .result-stat .number {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.03em;
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+    .result-stat .label {
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    /* Image grid */
+    .image-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+    }
+    .image-grid-item {
+      background: var(--surface);
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--border-bright);
+      text-transform: uppercase;
+      overflow: hidden;
+    }
+    .image-grid-item img { width: 100%; height: 100%; object-fit: cover; }
+    .image-caption {
+      font-size: 0.62rem;
+      color: var(--dim);
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+
+    /* Bullet list */
+    .detail-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .detail-list li {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.7;
+      display: flex;
+      gap: 0.75rem;
+    }
+    .detail-list li::before {
+      content: '—';
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* ── PREV / NEXT ── */
+    .nav-projects {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-top: 4rem;
+    }
+    .nav-project-link {
+      background: var(--bg);
+      padding: 1.5rem;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.2s;
+    }
+    .nav-project-link:hover { background: var(--surface); }
+    .nav-project-link.next { text-align: right; }
+    .nav-dir {
+      font-size: 0.58rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 0.4rem;
+    }
+    .nav-project-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .nav-project-link:hover .nav-project-title { color: var(--accent); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../index.html">Kyle <span>Kochi</span></a>
+  <a class="nav-back" href="../projects.html">← All projects</a>
+</nav>
+
+<div class="page">
+
+  <div class="project-eyebrow">Biomedical · Capstone</div>
+  <h1 class="project-title">Adjustable Prosthesis Socket</h1>
+
+  <div class="project-meta">
+    <div class="meta-item">
+      <span class="meta-label">Role</span>
+      <span class="meta-value">Co-Designer</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Organization</span>
+      <span class="meta-value">UBC Biomedical Engineering Capstone</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Year</span>
+      <span class="meta-value">2024 – 2025</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Tools</span>
+      <span class="meta-value">OnShape, FDM 3D Printing</span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Showcase</span>
+      <span class="meta-value"><a href="https://bme.ubc.ca/education/current-undergraduate-students/capstone/capstone-industry-projects/capstone-innovations-day-2025/#:~:text=TEAM%2016" target="_blank">Capstone Innovations Day 2025 ↗</a></span>
+    </div>
+  </div>
+
+  <div class="hero-image">
+    <!-- Replace with real image: <img src="../images/adjustable-socket-hero.jpg" alt="Adjustable Prosthesis Socket"> -->
+    [ Hero Image — Adjustable Prosthesis Socket ]
+  </div>
+
+  <div class="project-body">
+
+    <div>
+      <div class="section-label">Overview</div>
+      <p>
+        Co-designed a 3D-printable prosthetic socket system with adjustable volume and scalable fit for transradial amputees. The device enables consistent EMG signal acquisition for myoelectric control across daily fluctuations in residual limb volume — a persistent challenge in prosthetic fitting that limits device adoption and comfort.
+      </p>
+    </div>
+
+    <div>
+      <div class="section-label">What I Built</div>
+      <ul class="detail-list">
+        <li>Parametric CAD model in OnShape supporting custom limb geometries and rapid patient-specific fabrication.</li>
+        <li>Novel lacing mechanism and sleeve system engineered to accommodate daily limb volume changes of ±3% while maintaining consistent electrode contact for EMG acquisition.</li>
+        <li>FEA simulations to identify high-stress regions in the socket geometry, iterating the design to improve structural performance under real-world loading.</li>
+        <li>Full fabrication pipeline using FDM 3D printing, enabling custom socket production with a turnaround under 24 hours per unit.</li>
+      </ul>
+    </div>
+
+    <div>
+      <div class="section-label">Results</div>
+      <div class="results-row">
+        <div class="result-stat">
+          <div class="number">±3%</div>
+          <div class="label">Daily limb volume accommodation</div>
+        </div>
+        <div class="result-stat">
+          <div class="number">7 kg</div>
+          <div class="label">Validated load capacity</div>
+        </div>
+        <div class="result-stat">
+          <div class="number">&lt;24hr</div>
+          <div class="label">Custom socket fabrication turnaround</div>
+        </div>
+        <div class="result-stat">
+          <div class="number">100%</div>
+          <div class="label">EMG signal acquisition across all adjustment states</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-label">Images</div>
+      <div class="image-grid">
+        <div class="image-grid-item">[ Socket Assembly ]</div>
+        <div class="image-grid-item">[ Lacing Mechanism Detail ]</div>
+        <div class="image-grid-item">[ FEA Stress Analysis ]</div>
+        <div class="image-grid-item">[ Printed Components ]</div>
+      </div>
+      <p class="image-caption">Capstone project presented at UBC BME Innovations Day 2025, Team 16.</p>
+    </div>
+
+  </div>
+
+  <div class="nav-projects">
+    <a class="nav-project-link" href="ada-co2.html">
+      <div class="nav-dir">← Previous</div>
+      <div class="nav-project-title">ADA-CO2 Self-Driving Lab</div>
+    </a>
+    <a class="nav-project-link next" href="../projects.html">
+      <div class="nav-dir">All projects →</div>
+      <div class="nav-project-title">Back to Projects</div>
+    </a>
+  </div>
+
+</div>
+
+</body>
+</html>
