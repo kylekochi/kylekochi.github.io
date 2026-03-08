@@ -233,6 +233,33 @@
       font-style: italic;
     }
 
+    /* Team */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .team-member {
+      background: var(--surface);
+      padding: 1.25rem 1.5rem;
+    }
+    .team-member-name {
+      font-size: 0.8rem;
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+    .team-member-name:hover { color: var(--accent); }
+    .team-member-role {
+      font-size: 0.62rem;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+
     /* Bullet list */
     .detail-list {
       list-style: none;
@@ -383,6 +410,28 @@
         <div class="image-grid-item">[ Printed Components ]</div>
       </div>
       <p class="image-caption">Capstone project presented at UBC BME Innovations Day 2025, Team 16.</p>
+    </div>
+
+    <div>
+      <div class="section-label">Team</div>
+      <div class="team-grid">
+        <div class="team-member">
+          <a class="team-member-name" href="#" target="_blank">Team Member 1 ↗</a>
+          <div class="team-member-role">Biomedical Engineering</div>
+        </div>
+        <div class="team-member">
+          <a class="team-member-name" href="#" target="_blank">Team Member 2 ↗</a>
+          <div class="team-member-role">Biomedical Engineering</div>
+        </div>
+        <div class="team-member">
+          <a class="team-member-name" href="#" target="_blank">Team Member 3 ↗</a>
+          <div class="team-member-role">Biomedical Engineering</div>
+        </div>
+        <div class="team-member">
+          <a class="team-member-name" href="#" target="_blank">Team Member 4 ↗</a>
+          <div class="team-member-role">Biomedical Engineering</div>
+        </div>
+      </div>
     </div>
 
   </div>
