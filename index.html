@@ -161,6 +161,26 @@
     }
     .btn-secondary:hover { color: var(--text); border-color: var(--text); }
 
+    /* Option A: separate enter link below actions */
+    .btn-enter {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+      margin-top: 2.5rem;
+      padding-bottom: 2px;
+      border-bottom: 1px solid var(--text);
+      opacity: 0;
+      animation: fadeUp 0.6s 0.7s forwards;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-enter:hover { color: var(--accent); border-color: var(--accent); }
+
     .corner-mark {
       position: fixed;
       bottom: 2.5rem;
@@ -173,25 +193,7 @@
       animation: fadeUp 0.6s 1s forwards;
     }
 
-    .enter-prompt {
-      position: fixed;
-      bottom: 2.5rem;
-      right: clamp(2rem, 5vw, 4rem);
-      opacity: 0;
-      animation: fadeUp 0.6s 1.1s forwards;
-    }
-    .enter-prompt a {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.65rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .enter-prompt a:hover { color: var(--accent); }
-
-    @keyframes fadeUp {
+@keyframes fadeUp {
       from { opacity: 0; transform: translateY(16px); }
       to   { opacity: 1; transform: translateY(0); }
     }
@@ -219,12 +221,12 @@
     </a>
     <a class="btn-secondary" href="https://linkedin.com/in/kylekochi" target="_blank">LinkedIn ↗</a>
     <a class="btn-secondary" id="email-btn">Email ↗</a>
-    <a class="btn-secondary" href="work.html">Work ↗</a>
   </div>
+
+  <a class="btn-enter" href="work.html">Enter Site →</a>
 </div>
 
 <div class="corner-mark" id="corner-email"></div>
-<div class="enter-prompt"><a href="work.html">Enter ↘</a></div>
 
 <script>
   var e = 'kochikyle01' + '@' + 'gmail.com';
