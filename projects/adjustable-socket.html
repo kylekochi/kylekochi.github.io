@@ -314,6 +314,21 @@
     }
     .nav-project-link:hover .nav-project-title { color: var(--accent); }
 
+    /* Reflections / blog */
+    .reflections {
+      border-left: 2px solid var(--accent);
+      padding-left: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .reflections p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 2;
+    }
+    .reflections p + p { margin-top: 0; }
+
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(12px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -454,17 +469,33 @@
       <div class="section-label">Advisors</div>
       <div class="team-grid">
         <div class="team-member">
-          <span class="team-member-name" style="cursor:default;">Fraser Douglas</span>
+          <a class="team-member-name" href="https://www.linkedin.com/in/fraserdouglas/" target="_blank">Fraser Douglas ↗</a>
           <div class="team-member-role">Project Supervisor · UBC HuMBL Lab</div>
         </div>
         <div class="team-member">
-          <span class="team-member-name" style="cursor:default;">Saud Lingawi</span>
+          <a class="team-member-name" href="https://www.linkedin.com/in/saudlingawi/" target="_blank">Saud Lingawi ↗</a>
           <div class="team-member-role">Project Supervisor · UBC HuMBL Lab</div>
         </div>
         <div class="team-member">
-          <span class="team-member-name" style="cursor:default;">Dr. Pawel Kudzia</span>
-          <div class="team-member-role">Faculty Advisor · UBC Biomedical Engineering</div>
+          <a class="team-member-name" href="https://www.linkedin.com/in/pkudzia/" target="_blank">Dr. Pawel Kudzia ↗</a>
+          <div class="team-member-role">Faculty Advisor · SBME UBC</div>
         </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-label">Acknowledgements</div>
+      <p>
+        Thank you to Fraser Douglas and Saud Lingawi at the UBC HuMBL Lab for bringing us this problem and providing clinical context throughout the project. Thanks to Dr. Pawel Kudzia for his guidance as our faculty advisor, and to the UBC Biomedical Engineering capstone program for the opportunity to work on a project with real-world impact.
+      </p>
+    </div>
+
+    <div>
+      <div class="section-label">Reflections</div>
+      <div class="reflections">
+        <p>
+          [ Your thoughts here — what you learned, what surprised you, what you'd do differently, what this project meant to you. ]
+        </p>
       </div>
     </div>
 
