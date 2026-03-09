@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About — Kyle Kochi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0e0e0e;
+      --surface: #131313;
+      --border: #1e1e1e;
+      --border-bright: #2a2a2a;
+      --text: #f0ede8;
+      --muted: #555;
+      --dim: #333;
+      --accent: #d4ff4e;
+      --accent-dim: rgba(212, 255, 78, 0.07);
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.4;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(14,14,14,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(1.5rem, 4vw, 3rem);
+      height: 56px;
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 0.95rem;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    .nav-links a {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+
+    /* ── PAGE ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: clamp(3.5rem, 7vw, 6rem) clamp(1.5rem, 4vw, 3rem) 6rem;
+    }
+
+    /* ── INTRO ── */
+    .intro {
+      margin-bottom: 3.5rem;
+      opacity: 0;
+      animation: fadeUp 0.5s 0.05s forwards;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+    .eyebrow::before {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .intro h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      line-height: 0.97;
+      letter-spacing: -0.03em;
+      margin-bottom: 2rem;
+    }
+    .intro h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .intro-body {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    .intro-body p {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+    .intro-body p strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* ── PHOTO ── */
+    .photo-block {
+      width: 100%;
+      aspect-ratio: 3/1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 0;
+      overflow: hidden;
+      opacity: 0;
+      animation: fadeUp 0.5s 0.2s forwards;
+    }
+    .photo-block img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(20%);
+    }
+
+    /* ── HIGHLIGHTS ── */
+    .highlights {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+    .highlights li {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.7;
+      display: flex;
+      gap: 0.75rem;
+    }
+    .highlights li::before {
+      content: '—';
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .highlights li strong { color: var(--text); font-weight: 500; }
+
+    /* ── SECTIONS ── */
+    .section {
+      padding: 2.5rem 0;
+      border-top: 1px solid var(--border);
+      opacity: 0;
+      animation: fadeUp 0.5s forwards;
+    }
+    .section:nth-of-type(1) { animation-delay: 0.25s; }
+    .section:nth-of-type(2) { animation-delay: 0.32s; }
+    .section:nth-of-type(3) { animation-delay: 0.39s; }
+    .section:nth-of-type(4) { animation-delay: 0.46s; }
+
+    .section-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .section p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+    .section p + p { margin-top: 1rem; }
+    .section p strong { color: var(--text); font-weight: 500; }
+
+    /* ── CURRENTLY GRID ── */
+    .currently-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    @media (max-width: 520px) {
+      .currently-grid { grid-template-columns: 1fr; }
+    }
+    .currently-item {
+      background: var(--surface);
+      padding: 1.25rem 1.5rem;
+    }
+    .currently-item .c-label {
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 0.4rem;
+    }
+    .currently-item .c-value {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .currently-item .c-value span { color: var(--accent); }
+
+    /* ── CONTACT LINKS ── */
+    .contact-links {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-top: 1.25rem;
+    }
+    .contact-link {
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      border-bottom: 1px solid var(--border-bright);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .contact-link:hover { color: var(--accent); border-color: var(--accent); }
+    .contact-link.primary { color: var(--accent); border-color: var(--accent); }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      padding: 2rem clamp(1.5rem, 4vw, 3rem);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    footer span {
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--dim);
+    }
+    footer a {
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    footer a:hover { color: var(--accent); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">Kyle <span>Kochi</span></a>
+  <div class="nav-links">
+    <a href="projects.html">Projects</a>
+    <a href="#">Journal</a>
+    <a href="#">Photos</a>
+    <a href="about.html" class="active">About</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="intro">
+    <div class="eyebrow">About</div>
+    <h1>Engineer.<br>Athlete.<br><em>Builder.</em></h1>
+
+    <div class="intro-body">
+      <p>
+        I'm Kyle — a mechatronics engineer from Vancouver, recently graduated from UBC. I build systems where mechanical design, electronics, and software intersect: robots that run labs overnight, prosthetic arms that respond to muscle signals, and hardware that works reliably when it actually matters.
+      </p>
+      <p>
+        The problems I enjoy most don't stay neatly inside one discipline. A robotic mixing station is a mechanical problem until sensors fail. A prosthetic hand is an electrical problem until the firmware breaks. My time spend playing baseball at UBC while studying engineering and building robots on the side reflects how I approach real-world problems — competing seriously at something physical while doing technical work shaped how I think about execution, team dynamics, and what it actually takes to ship something under pressure.
+      </p>
+    </div>
+  </div>
+
+  <!-- Replace with: <img src="images/about/photo.jpg" alt="Kyle Kochi"> -->
+  <div class="photo-block">[ Photo — replace with images/about/photo.jpg ]</div>
+
+  <div class="section">
+    <div class="section-label">Highlights</div>
+    <ul class="highlights">
+      <li><strong>Co-Captain</strong> — UBC Bionics, 45-member student robotics team</li>
+      <li>Built <strong>autonomous robotic lab systems</strong> used daily by researchers at UBC</li>
+      <li>Designed prosthetic arm systems that <strong>competed at CYBATHLON 2024</strong></li>
+      <li>Designed an <strong>adjustable prosthetic socket</strong> tested on real limb models</li>
+      <li><strong>UBC Baseball</strong> athlete (CCBC)</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-label">The Thread</div>
+    <p>Most of my projects share something: they were built to be used.</p>
+    <ul class="highlights" style="margin-top: 1rem; margin-bottom: 1rem;">
+      <li>The robotic mixing station I built at the Berlinguette Research Group ran over 100 autonomous cycles and was used daily by more than 30 researchers.</li>
+      <li>The prosthetic arm competed at CYBATHLON.</li>
+      <li>The adjustable socket was tested on a real limb model.</li>
+    </ul>
+    <p>
+      I'm drawn to problems where the gap between "working in the lab" and "working in the world" is hard to close — problems that require caring about tolerances, reliability, and the person on the other end.
+    </p>
+    <p style="margin-top: 1rem; color: var(--muted);">
+      Long term, I'm interested in building robotic systems that move beyond controlled environments and into the real world.
+    </p>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Currently</div>
+    <div class="currently-grid">
+      <div class="currently-item">
+        <div class="c-label">Status</div>
+        <div class="c-value"><span>Open to work</span> — looking for robotics or hardware engineering roles</div>
+      </div>
+      <div class="currently-item">
+        <div class="c-label">Location</div>
+        <div class="c-value">Vancouver, BC — targeting <span>San Francisco</span></div>
+      </div>
+      <div class="currently-item">
+        <div class="c-label">Interested in</div>
+        <div class="c-value">Robotics, physical AI, hardware-software integration, mechatronics</div>
+      </div>
+      <div class="currently-item">
+        <div class="c-label">Graduated</div>
+        <div class="c-value">UBC Biomedical Engineering · <span>May 2025</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Outside Work</div>
+    <p>
+      Sport has always been a big part of my life. Competing seriously while completing an engineering degree and running a robotics team shaped how I approach technical work — showing up consistently, working through setbacks, and delivering under pressure.
+    </p>
+    <p>
+      Beyond that, I'm interested in how things are made. (Which is probably why I love spending time in labs and machine shops, and why the code I write usually moves something in the physical world.)
+    </p>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Get in Touch</div>
+    <p>
+      If you're building something in robotics, hardware, or physical AI and think there might be a fit — I'd love to talk.
+    </p>
+    <div class="contact-links">
+      <a class="contact-link primary" id="about-email">Email ↗</a>
+      <a class="contact-link" href="https://linkedin.com/in/kylekochi" target="_blank">LinkedIn ↗</a>
+      <a class="contact-link" href="https://drive.google.com/file/d/1Dq3fDtBLFxJKV7Z5hT5R1JmiJFAF5LLO/view?usp=sharing" target="_blank">Resume ↗</a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span>Kyle Kochi — <span id="footer-email"></span></span>
+  <a href="projects.html">← Projects</a>
+</footer>
+
+<script>
+  var e = 'kochikyle01' + '@' + 'gmail.com';
+  document.getElementById('about-email').href = 'mailto:' + e;
+  document.getElementById('footer-email').textContent = e;
+</script>
+
+</body>
+</html>
