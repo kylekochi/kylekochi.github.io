@@ -15,7 +15,7 @@
       --border: #1e1e1e;
       --border-bright: #2a2a2a;
       --text: #f0ede8;
-      --muted: #555;
+      --muted: #888;
       --dim: #333;
       --accent: #d4ff4e;
       --accent-dim: rgba(212, 255, 78, 0.07);
@@ -175,7 +175,7 @@
 
     .project-body p {
       font-size: 0.82rem;
-      color: var(--muted);
+      color: #888;
       line-height: 1.9;
     }
 
@@ -225,7 +225,7 @@
       text-transform: uppercase;
       overflow: hidden;
     }
-    .image-grid-item img { width: 100%; height: 100%; object-fit: cover; }
+    .image-grid-item img { width: 100%; height: 100%; object-fit: contain; cursor: zoom-in; }
     .image-caption {
       font-size: 0.62rem;
       color: var(--dim);
@@ -324,7 +324,7 @@
     }
     .reflections p {
       font-size: 0.88rem;
-      color: var(--muted);
+      color: #888;
       line-height: 2;
     }
     .reflections p + p { margin-top: 0; }
@@ -371,6 +371,10 @@
     <div class="meta-item">
       <span class="meta-label">Showcase</span>
       <span class="meta-value"><a href="https://bme.ubc.ca/education/current-undergraduate-students/capstone/capstone-industry-projects/capstone-innovations-day-2025/#:~:text=TEAM%2016" target="_blank">Capstone Innovations Day 2025 ↗</a></span>
+    </div>
+    <div class="meta-item">
+      <span class="meta-label">Poster</span>
+      <span class="meta-value"><a href="https://drive.google.com/file/d/1qsjR7eLCf67y_ImP67K4fLyPyV0muuzy/view?usp=sharing" target="_blank">View Poster ↗</a></span>
     </div>
   </div>
 
@@ -426,13 +430,13 @@
           <img src="../images/adjustable-socket/socket-model.png" alt="Socket CAD Model">
         </div>
         <div class="image-grid-item">
+          <img src="../images/adjustable-socket/sleeve.jpg" alt="Sleeve System">
+        </div>
+        <div class="image-grid-item">
           <img src="../images/adjustable-socket/features-1.png" alt="Socket Feature Detail">
         </div>
         <div class="image-grid-item">
           <img src="../images/adjustable-socket/features-2.png" alt="Socket Feature Detail">
-        </div>
-        <div class="image-grid-item">
-          <img src="../images/adjustable-socket/sleeve.jpg" alt="Sleeve System">
         </div>
       </div>
       <p class="image-caption">Capstone project presented at UBC Design and Innovation Day 2025.</p>
@@ -489,7 +493,23 @@
       <div class="section-label">Reflections</div>
       <div class="reflections">
         <p>
-          [ Your thoughts here — what you learned, what surprised you, what you'd do differently, what this project meant to you. ]
+          A Capstone project is quite different from most school projects. Aside from the excitement to have the opportunity to work on such a cool project, there’s a lot more at stake. You have clients, stakeholders, and are working with an actual project budget. The fact that we were designing something that actually goes on someone’s body made this even more substantial to us. It wasn’t enough to say “good enough to meet the rubric”, because that mindset doesn’t really cut it. That really kept us honest throughout this project.
+        </p>
+        <p>
+          Going through the design process was a huge learning curve. It wasn’t just about learning to do the engineering work, but also learning how to work effectively together as a team for an entire academic year.
+
+        </p>
+        <p>
+          We ended up testing multiple materials, prototypes, and mechanisms to ensure both socket fit and EMG function. Interestingly, one of the biggest problems we faced was trying to find a model of a limb that we could test on. We ended up finding a few models online, and modelled a few dummy limbs based on our own measurements. We ended up with a wider range of limbs to test on, which also helped us validate our socket fit across a wider range of models.
+        </p>
+        <p>
+          A lot of hard work ended up being in placed I didn’t expect. For example, we spent a substantial amount of time testing sleeve fabrics — neoprene, cotton blends, spandex — but every material we tried always seemed to have some tradeoff we didn’t seem coming. Too stiff, material deforms or rips permanently, not breathable enough. A lot of this seemed trivial at the start but it really wasn’t. 
+        </p>
+        <p>
+          Our client was great to work with. We had lots of discussions about the feasibility of our designs, and they pushed back on our assumptions in ways that ultimately made our final design a lot better. I think learning to take feedback and move and iterate quickly was one of the most valuable experiences working on a project like this can give you.
+        </p>
+        <p>
+          If I were to approach this project again, I would print physical prototypes much earlier in our design process. While we did not have the luxury to go crazy with the prints (our program was moving buildings, and the design of the course left prototyping towards the latter half of the term), I believe that we learned so much in 10 minutes of fidgeting with a new prototype instead of spending hours in CAD. 
         </p>
       </div>
     </div>
@@ -508,6 +528,43 @@
   </div>
 
 </div>
+
+<!-- ── LIGHTBOX ── -->
+<div id="lightbox" style="
+  display: none; position: fixed; inset: 0; z-index: 100;
+  background: rgba(0,0,0,0.92); align-items: center; justify-content: center;
+  cursor: zoom-out;
+">
+  <img id="lightbox-img" style="
+    max-width: 90vw; max-height: 90vh; object-fit: contain;
+    border: 1px solid #2a2a2a;
+  " src="" alt="">
+</div>
+
+<script>
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lightbox-img');
+
+  document.querySelectorAll('.image-grid-item img').forEach(function(img) {
+    img.addEventListener('click', function() {
+      lbImg.src = img.src;
+      lbImg.alt = img.alt;
+      lb.style.display = 'flex';
+    });
+  });
+
+  lb.addEventListener('click', function() {
+    lb.style.display = 'none';
+    lbImg.src = '';
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      lb.style.display = 'none';
+      lbImg.src = '';
+    }
+  });
+</script>
 
 </body>
 </html>
